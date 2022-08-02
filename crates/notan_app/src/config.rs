@@ -4,6 +4,7 @@ use crate::builder::{AppBuilder, BuildConfig};
 /// Builder configuration for the window options
 #[derive(Clone)]
 pub struct WindowConfig {
+    pub canvas_id: String,
     /// Window's title
     /// `Web: no-op`
     pub title: String,
@@ -61,6 +62,7 @@ pub struct WindowConfig {
 impl Default for WindowConfig {
     fn default() -> Self {
         Self {
+            canvas_id: String::from("canvas_id"),
             title: String::from("Notan App"),
             width: 800,
             height: 600,
@@ -84,6 +86,11 @@ impl WindowConfig {
     /// Create a new instance using default values
     pub fn new() -> Self {
         Default::default()
+    }
+
+    pub fn canvas_id(mut self, canvas_id: String) -> Self {
+        self.canvas_id = canvas_id;
+        self
     }
 
     /// Sets the window's title

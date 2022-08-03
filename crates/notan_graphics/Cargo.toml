@@ -15,10 +15,10 @@ description = "Provides simple graphics API for Notan"
 log = "0.4"
 bytemuck = "1.9"
 parking_lot = "0.12"
-image = { version = "0.24", default-features = false, features = ["jpeg", "png"] }
+image = { version = "0.24", default-features = false, features = ["png"] }
 notan_math = { path = "../notan_math", version = "0.5.1" }
 notan_macro = { path = "../notan_macro", version = "0.5.1" }
 notan_utils = { path = "../notan_utils", version = "0.5.1" }
 
 [features]
-texture_to_file = ["notan_utils/save_file"]
+texture_to_file = ["notan_utils/save_file", "image/jpeg", "image/png"]

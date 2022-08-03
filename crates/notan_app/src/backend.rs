@@ -117,6 +117,7 @@ pub trait WindowBackend {
     /// Returns the window's size
     fn size(&self) -> (i32, i32);
 
+    #[cfg(feature = "fullscreen")]
     /// Enable or disable the fullscreen mode
     fn set_fullscreen(&mut self, enabled: bool);
 

@@ -1,5 +1,6 @@
 use crate::{Draw, DrawManager};
 use notan_app::graphics::*;
+#[cfg(feature = "text")]
 use notan_text::{Text, TextExtension};
 
 pub trait CreateDraw {
@@ -41,6 +42,7 @@ impl GfxRenderer for Draw {
         extensions: &mut ExtContainer,
         target: Option<&RenderTexture>,
     ) -> Result<(), String> {
+        #[cfg(feature = "text")]
         let mut text_ext = extensions.get_mut::<Text, TextExtension>().ok_or_else(|| {
             "Missing TextExtension. You may need to add 'DrawConfig' to notan.".to_string()
         })?;
@@ -48,9 +50,12 @@ impl GfxRenderer for Draw {
             "Missing DrawExtension. You may need to add 'DrawConfig' to notan.".to_string()
         })?;
 
-        let cmds = ext
-            .manager
-            .process_draw(self, device, text_ext.glyph_brush_mut());
+        let cmds = ext.manager.process_draw(
+            self,
+            device,
+            #[cfg(feature = "text")]
+            text_ext.glyph_brush_mut(),
+        );
         match target {
             None => device.render(cmds),
             Some(rt) => device.render_to(rt, cmds),

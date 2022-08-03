@@ -2,7 +2,9 @@ use crate::utils::window_add_event_listener;
 use crate::window::WebWindowBackend;
 use notan_core::events::Event;
 use notan_core::keyboard::KeyCode;
+#[cfg(feature = "fullscreen")]
 use std::cell::RefCell;
+#[cfg(feature = "fullscreen")]
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 use web_sys::KeyboardEvent;
@@ -15,15 +17,17 @@ pub struct KeyboardCallbacks {
 
 pub fn enable_keyboard(
     win: &mut WebWindowBackend,
-    fullscreen_dispatcher: Rc<RefCell<dyn Fn()>>,
+    #[cfg(feature = "fullscreen")] fullscreen_dispatcher: Rc<RefCell<dyn Fn()>>,
 ) -> Result<(), String> {
     let add_evt_down = win.add_event_fn();
     let add_evt_up = win.add_event_fn();
     let callbacks = &mut win.keyboard_callbacks;
+    #[cfg(feature = "fullscreen")]
     let fullscreen = fullscreen_dispatcher.clone();
     callbacks.on_down = Some(window_add_event_listener(
         "keydown",
         move |e: KeyboardEvent| {
+            #[cfg(feature = "fullscreen")]
             (*fullscreen.borrow_mut())();
             if let Some(key) = keyboard_code(&e.code()) {
                 add_evt_down(Event::KeyDown { key });
@@ -38,10 +42,12 @@ pub fn enable_keyboard(
         },
     )?);
 
+    #[cfg(feature = "fullscreen")]
     let fullscreen = fullscreen_dispatcher.clone();
     callbacks.on_up = Some(window_add_event_listener(
         "keyup",
         move |e: KeyboardEvent| {
+            #[cfg(feature = "fullscreen")]
             (*fullscreen.borrow_mut())();
             if let Some(key) = keyboard_code(&e.code()) {
                 add_evt_up(Event::KeyUp { key });

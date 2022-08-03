@@ -31,6 +31,7 @@ impl WindowBackend for EmptyWindowBackend {
         self.size
     }
 
+    #[cfg(feature = "fullscreen")]
     fn set_fullscreen(&mut self, enabled: bool) {
         self.is_fullscreen = enabled;
     }

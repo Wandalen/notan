@@ -17,8 +17,10 @@ use notan_core::events::{Event, EventIterator};
 use notan_core::mouse::MouseButton;
 use notan_input::internals::{
     clear_keyboard, clear_mouse, process_keyboard_events, process_mouse_events,
-    process_touch_events,
 };
+
+#[cfg(feature = "touch")]
+use notan_input::internals::process_touch_events;
 
 pub use crate::handlers::SetupHandler;
 
@@ -314,6 +316,7 @@ where
 
                 process_keyboard_events(&mut app.keyboard, &evt, delta);
                 process_mouse_events(&mut app.mouse, &evt, delta);
+                #[cfg(feature = "touch")]
                 process_touch_events(&mut app.touch, &evt, delta);
 
                 match plugins.event(app, &mut assets, &evt)? {

@@ -1,6 +1,7 @@
 mod backend;
 mod keyboard;
 mod mouse;
+#[cfg(feature = "touch")]
 mod touch;
 mod utils;
 mod window;

@@ -24,6 +24,7 @@ pub trait DrawCustomPipeline {
     fn image_pipeline(&mut self) -> CustomPipelineBuilder;
     fn shape_pipeline(&mut self) -> CustomPipelineBuilder;
     fn pattern_pipeline(&mut self) -> CustomPipelineBuilder;
+    #[cfg(feature = "text")]
     fn text_pipeline(&mut self) -> CustomPipelineBuilder;
 }
 
@@ -40,6 +41,7 @@ impl DrawCustomPipeline for Draw {
         CustomPipelineBuilder::new(self, CustomPipelineType::Pattern)
     }
 
+    #[cfg(feature = "text")]
     fn text_pipeline(&mut self) -> CustomPipelineBuilder {
         CustomPipelineBuilder::new(self, CustomPipelineType::Text)
     }
@@ -50,6 +52,7 @@ enum CustomPipelineType {
     Image,
     Shape,
     Pattern,
+    #[cfg(feature = "text")]
     Text,
 }
 
@@ -131,6 +134,7 @@ fn get_custom_pipeline(draw: &mut Draw, typ: CustomPipelineType) -> &mut CustomP
         CustomPipelineType::Image => &mut draw.image_pipeline,
         CustomPipelineType::Shape => &mut draw.shape_pipeline,
         CustomPipelineType::Pattern => &mut draw.pattern_pipeline,
+        #[cfg(feature = "text")]
         CustomPipelineType::Text => &mut draw.text_pipeline,
     }
 }

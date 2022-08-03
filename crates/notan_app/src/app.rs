@@ -6,6 +6,7 @@ use notan_audio::Audio;
 
 use notan_input::keyboard::Keyboard;
 use notan_input::mouse::Mouse;
+#[cfg(feature = "touch")]
 use notan_input::touch::Touch;
 
 /// Represents the state of the application, always accessible across the event's cycle
@@ -24,6 +25,7 @@ pub struct App {
     pub keyboard: Keyboard,
 
     /// Touch data
+    #[cfg(feature = "touch")]
     pub touch: Touch,
 
     /// System timer
@@ -43,6 +45,7 @@ impl App {
     pub(crate) fn new(backend: Box<dyn Backend>, #[cfg(feature = "audio")] audio: Audio) -> Self {
         let mouse = Default::default();
         let keyboard = Default::default();
+        #[cfg(feature = "touch")]
         let touch = Default::default();
         Self {
             backend,
@@ -50,6 +53,7 @@ impl App {
             audio,
             mouse,
             keyboard,
+            #[cfg(feature = "touch")]
             touch,
             system_timer: AppTimer::default(),
             timer: AppTimer::default(),

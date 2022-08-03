@@ -117,6 +117,7 @@ impl TextPainter {
         batch: &Batch,
         projection: &Mat4,
     ) {
+        #[cfg(feature = "text")]
         if let BatchType::Text { texts } = &batch.typ {
             process_pipeline(renderer, batch, &self.pipeline);
             let mut vertices = vec![];

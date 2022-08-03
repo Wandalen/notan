@@ -163,6 +163,7 @@ pub fn canvas_position_from_global(
     (x as _, y as _)
 }
 
+#[cfg(feature = "touch")]
 pub fn canvas_position_from_touch(
     canvas: &HtmlCanvasElement,
     evt: web_sys::PointerEvent,

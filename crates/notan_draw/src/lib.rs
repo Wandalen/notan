@@ -8,6 +8,7 @@ mod images;
 mod manager;
 mod patterns;
 mod shapes;
+#[cfg(feature = "text")]
 mod texts;
 mod transform;
 
@@ -22,5 +23,6 @@ pub use images::*;
 pub use manager::*;
 pub use patterns::*;
 pub use shapes::*;
+#[cfg(feature = "text")]
 pub use texts::*;
 pub use transform::*;

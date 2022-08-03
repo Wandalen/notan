@@ -1,5 +1,6 @@
 use crate::DrawExtension;
 use notan_app::{AppBuilder, AppState, BackendSystem, BuildConfig, Graphics};
+#[cfg(feature = "text")]
 use notan_text::*;
 
 pub struct DrawConfig;
@@ -11,6 +12,7 @@ where
     fn apply(&self, builder: AppBuilder<S, B>) -> AppBuilder<S, B> {
         builder.add_graphic_ext(|gfx: &mut Graphics| {
             // Add text extension if necessary
+            #[cfg(feature = "text")]
             if gfx.extension::<Text, TextExtension>().is_none() {
                 let text_ext = TextExtension::new(gfx).unwrap();
                 gfx.add_extension(text_ext);

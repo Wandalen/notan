@@ -1,7 +1,9 @@
+#[cfg(feature = "text")]
 use notan_glyph::OwnedSection;
 use notan_graphics::prelude::*;
 use notan_math::{Mat3, Vec3};
 
+#[cfg(feature = "text")]
 #[derive(Clone, Debug)]
 pub(crate) struct TextData {
     pub transform: Mat3,
@@ -12,10 +14,17 @@ pub(crate) struct TextData {
 
 #[derive(Clone, Debug)]
 pub(crate) enum BatchType {
-    Image { texture: Texture },
-    Pattern { texture: Texture },
+    Image {
+        texture: Texture,
+    },
+    Pattern {
+        texture: Texture,
+    },
     Shape,
-    Text { texts: Vec<TextData> },
+    #[cfg(feature = "text")]
+    Text {
+        texts: Vec<TextData>,
+    },
 }
 
 #[derive(Clone, Debug)]
@@ -35,6 +44,7 @@ impl Batch {
         matches!(self.typ, BatchType::Shape)
     }
 
+    #[cfg(feature = "text")]
     pub fn is_text(&self) -> bool {
         matches!(self.typ, BatchType::Text { .. })
     }
@@ -66,6 +76,7 @@ impl Batch {
             BatchType::Image { .. } => 8,
             BatchType::Pattern { .. } => 12,
             BatchType::Shape => 6,
+            #[cfg(feature = "text")]
             BatchType::Text { .. } => 8, //TODO check offset
         }
     }

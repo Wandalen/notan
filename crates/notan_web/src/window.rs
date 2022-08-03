@@ -1,9 +1,12 @@
 use crate::keyboard::{enable_keyboard, KeyboardCallbacks};
 use crate::mouse::{enable_mouse, MouseCallbacks};
+#[cfg(feature = "touch")]
 use crate::touch::{enable_touch, PointerCallbacks};
+#[cfg(feature = "fullscreen")]
+use crate::utils::window_add_event_listener;
 use crate::utils::{
     canvas_add_event_listener, canvas_visible, get_notan_size, get_or_create_canvas,
-    request_animation_frame, set_size_dpi, window_add_event_listener,
+    request_animation_frame, set_size_dpi,
 };
 use notan_app::{CursorIcon, WindowConfig};
 use notan_app::{Event, EventIterator, WindowBackend};
@@ -32,18 +35,25 @@ pub struct WebWindowBackend {
 
     events: Rc<RefCell<EventIterator>>,
 
+    #[cfg(feature = "fullscreen")]
     fullscreen_requested: Rc<RefCell<Option<bool>>>,
+    #[cfg(feature = "fullscreen")]
     fullscreen_last_size: Rc<RefCell<Option<(i32, i32)>>>,
+    #[cfg(feature = "fullscreen")]
     fullscreen_callback_ref: Option<Closure<dyn FnMut(WebEvent)>>,
 
+    #[cfg(feature = "fullscreen")]
     min_size: Option<(i32, i32)>,
+    #[cfg(feature = "fullscreen")]
     max_size: Option<(i32, i32)>,
+    #[cfg(feature = "fullscreen")]
     resize_callback_ref: Option<Closure<dyn FnMut(WebEvent)>>,
 
     _context_menu_callback_ref: Closure<dyn FnMut(WebEvent)>,
 
     pub(crate) mouse_callbacks: MouseCallbacks,
     pub(crate) keyboard_callbacks: KeyboardCallbacks,
+    #[cfg(feature = "touch")]
     pub(crate) touch_callbacks: PointerCallbacks,
 
     #[cfg(feature = "drop_files")]
@@ -86,17 +96,24 @@ impl WebWindowBackend {
                 e.prevent_default();
             })?;
 
+        #[cfg(feature = "fullscreen")]
         let fullscreen_requested = Rc::new(RefCell::new(None));
+        #[cfg(feature = "fullscreen")]
         let fullscreen_last_size = Rc::new(RefCell::new(None));
+        #[cfg(feature = "fullscreen")]
         let fullscreen_callback_ref = None;
         let capture_requested = Rc::new(RefCell::new(None));
 
+        #[cfg(feature = "text")]
         let min_size = config.min_size;
+        #[cfg(feature = "text")]
         let max_size = config.max_size;
+        #[cfg(feature = "text")]
         let resize_callback_ref = None;
 
         let mouse_callbacks = Default::default();
         let keyboard_callbacks = Default::default();
+        #[cfg(feature = "touch")]
         let touch_callbacks = Default::default();
 
         #[cfg(feature = "drop_files")]
@@ -116,17 +133,24 @@ impl WebWindowBackend {
             canvas_parent,
             mouse_callbacks,
             keyboard_callbacks,
+            #[cfg(feature = "touch")]
             touch_callbacks,
 
             #[cfg(feature = "drop_files")]
             file_callbacks,
 
+            #[cfg(feature = "fullscreen")]
             fullscreen_requested,
+            #[cfg(feature = "fullscreen")]
             fullscreen_last_size,
+            #[cfg(feature = "fullscreen")]
             fullscreen_callback_ref,
             events,
+            #[cfg(feature = "text")]
             min_size,
+            #[cfg(feature = "text")]
             max_size,
+            #[cfg(feature = "text")]
             resize_callback_ref,
             _context_menu_callback_ref: context_menu_callback_ref,
             config,
@@ -177,20 +201,33 @@ impl WebWindowBackend {
 
         self.set_size(ww, hh);
 
+        #[cfg(feature = "fullscreen")]
         let fullscreen_dispatcher = fullscreen_dispatcher_callback(&mut self);
 
-        enable_mouse(&mut self, fullscreen_dispatcher.clone())?;
-        enable_keyboard(&mut self, fullscreen_dispatcher.clone())?;
+        enable_mouse(
+            &mut self,
+            #[cfg(feature = "fullscreen")]
+            fullscreen_dispatcher.clone(),
+        )?;
+        enable_keyboard(
+            &mut self,
+            #[cfg(feature = "fullscreen")]
+            fullscreen_dispatcher.clone(),
+        )?;
+        #[cfg(feature = "touch")]
         enable_touch(&mut self, fullscreen_dispatcher.clone())?;
 
         #[cfg(feature = "drop_files")]
         enable_files(&mut self)?;
 
+        #[cfg(feature = "fullscreen")]
         if self.config.resizable {
             enable_resize(&mut self)?;
         }
 
+        #[cfg(feature = "fullscreen")]
         enable_fullscreen(&mut self)?;
+        #[cfg(feature = "fullscreen")]
         if self.config.fullscreen {
             self.set_fullscreen(true);
         }
@@ -240,6 +277,7 @@ impl WindowBackend for WebWindowBackend {
         get_notan_size(&self.canvas)
     }
 
+    #[cfg(feature = "fullscreen")]
     fn set_fullscreen(&mut self, enabled: bool) {
         *self.fullscreen_requested.borrow_mut() = Some(enabled);
     }
@@ -320,6 +358,7 @@ impl WindowBackend for WebWindowBackend {
 unsafe impl Send for WebWindowBackend {}
 unsafe impl Sync for WebWindowBackend {}
 
+#[cfg(feature = "fullscreen")]
 fn enable_fullscreen(win: &mut WebWindowBackend) -> Result<(), String> {
     if win.fullscreen_callback_ref.is_none() {
         let canvas = win.canvas.clone();
@@ -348,6 +387,7 @@ fn enable_fullscreen(win: &mut WebWindowBackend) -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(feature = "fullscreen")]
 fn fullscreen_dispatcher_callback(win: &mut WebWindowBackend) -> Rc<RefCell<dyn Fn()>> {
     let fullscreen_requested = win.fullscreen_requested.clone();
     let canvas = win.canvas.clone();
@@ -380,6 +420,7 @@ fn fullscreen_dispatcher_callback(win: &mut WebWindowBackend) -> Rc<RefCell<dyn 
     }))
 }
 
+#[cfg(feature = "fullscreen")]
 fn enable_resize(win: &mut WebWindowBackend) -> Result<(), String> {
     let canvas = win.canvas.clone();
     let parent = win.canvas_parent.clone();

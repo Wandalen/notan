@@ -1,9 +1,11 @@
 use super::images::*;
 use super::patterns::*;
 use super::shapes::*;
+#[cfg(feature = "text")]
 use super::texts::*;
 use crate::batch::*;
 use crate::draw::*;
+#[cfg(feature = "text")]
 use notan_glyph::GlyphBrush;
 use notan_graphics::prelude::*;
 use notan_math::Mat4;
@@ -12,6 +14,7 @@ pub struct DrawManager {
     shape_painter: ShapePainter,
     image_painter: ImagePainter,
     pattern_painter: PatternPainter,
+    #[cfg(feature = "text")]
     text_painter: TextPainter,
     renderer: Renderer,
     drawing_mask: bool,
@@ -22,12 +25,14 @@ impl DrawManager {
         let shape_painter = ShapePainter::new(device)?;
         let image_painter = ImagePainter::new(device)?;
         let pattern_painter = PatternPainter::new(device)?;
+        #[cfg(feature = "text")]
         let text_painter = TextPainter::new(device)?;
         let renderer = device.create_renderer();
         Ok(Self {
             shape_painter,
             image_painter,
             pattern_painter,
+            #[cfg(feature = "text")]
             text_painter,
             renderer,
             drawing_mask: false,
@@ -38,10 +43,16 @@ impl DrawManager {
         &mut self,
         draw: &Draw,
         device: &mut Device,
-        glyphs: &mut GlyphBrush,
+        #[cfg(feature = "text")] glyphs: &mut GlyphBrush,
     ) -> &[Commands] {
         self.renderer.clear();
-        process_draw(self, draw, device, glyphs);
+        process_draw(
+            self,
+            draw,
+            device,
+            #[cfg(feature = "text")]
+            glyphs,
+        );
         self.renderer.commands()
     }
 
@@ -73,6 +84,7 @@ impl DrawManager {
         create_shape_pipeline(device, fragment)
     }
 
+    #[cfg(feature = "text")]
     pub fn create_text_pipeline(
         &self,
         device: &mut Device,
@@ -83,9 +95,9 @@ impl DrawManager {
 }
 
 fn paint_batch(
-    device: &mut Device,
+    #[cfg(feature = "text")] device: &mut Device,
     manager: &mut DrawManager,
-    glyphs: &mut GlyphBrush,
+    #[cfg(feature = "text")] glyphs: &mut GlyphBrush,
     b: &Batch,
     projection: &Mat4,
 ) {
@@ -109,6 +121,7 @@ fn paint_batch(
                 .pattern_painter
                 .push(&mut manager.renderer, b, projection)
         }
+        #[cfg(feature = "text")]
         BatchType::Text { .. } => {
             manager
                 .text_painter
@@ -117,6 +130,7 @@ fn paint_batch(
     }
 }
 
+#[cfg(feature = "text")]
 fn process_glyphs(
     manager: &mut DrawManager,
     draw: &Draw,
@@ -156,13 +170,15 @@ fn process_draw(
     manager: &mut DrawManager,
     draw: &Draw,
     device: &mut Device,
-    glyphs: &mut GlyphBrush,
+    #[cfg(feature = "text")] glyphs: &mut GlyphBrush,
 ) {
+    #[cfg(feature = "text")]
     process_glyphs(manager, draw, device, glyphs);
 
     manager.image_painter.clear();
     manager.shape_painter.clear();
     manager.pattern_painter.clear();
+    #[cfg(feature = "text")]
     manager.text_painter.clear();
 
     manager.renderer.begin(Some(&ClearOptions {
@@ -171,11 +187,27 @@ fn process_draw(
     }));
 
     let projection = draw.projection();
-    draw.batches
-        .iter()
-        .for_each(|b| paint_batch(device, manager, glyphs, b, &projection));
+    draw.batches.iter().for_each(|b| {
+        paint_batch(
+            #[cfg(feature = "text")]
+            device,
+            manager,
+            #[cfg(feature = "text")]
+            glyphs,
+            b,
+            &projection,
+        )
+    });
     if let Some(current) = &draw.current_batch {
-        paint_batch(device, manager, glyphs, current, &projection);
+        paint_batch(
+            #[cfg(feature = "text")]
+            device,
+            manager,
+            #[cfg(feature = "text")]
+            glyphs,
+            current,
+            &projection,
+        );
     }
 
     manager.renderer.end();
@@ -183,6 +215,7 @@ fn process_draw(
     manager.image_painter.upload_buffers(device);
     manager.shape_painter.upload_buffers(device);
     manager.pattern_painter.upload_buffers(device);
+    #[cfg(feature = "text")]
     manager.text_painter.upload_buffers(device);
 }
 

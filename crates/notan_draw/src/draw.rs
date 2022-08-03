@@ -1,10 +1,12 @@
 use crate::batch::*;
 pub(crate) use crate::custom_pipeline::CustomPipeline;
 use crate::transform::Transform;
+#[cfg(feature = "text")]
 use notan_glyph::Section;
 use notan_graphics::color::Color;
 use notan_graphics::prelude::*;
 use notan_math::{Mat3, Mat4};
+#[cfg(feature = "text")]
 use notan_text::Font;
 
 #[derive(Debug, Clone)]
@@ -21,7 +23,9 @@ pub struct Draw {
     pub(crate) shape_pipeline: CustomPipeline,
     pub(crate) image_pipeline: CustomPipeline,
     pub(crate) pattern_pipeline: CustomPipeline,
+    #[cfg(feature = "text")]
     pub(crate) text_pipeline: CustomPipeline,
+    #[cfg(feature = "text")]
     pub(crate) text_batch_indices: Option<Vec<usize>>,
     masking: bool,
 }
@@ -48,8 +52,10 @@ impl Draw {
             shape_pipeline: Default::default(),
             image_pipeline: Default::default(),
             pattern_pipeline: Default::default(),
+            #[cfg(feature = "text")]
             text_pipeline: Default::default(),
             masking: false,
+            #[cfg(feature = "text")]
             text_batch_indices: None,
         }
     }
@@ -170,6 +176,7 @@ impl Draw {
                 BatchType::Image { .. } => &self.image_pipeline,
                 BatchType::Pattern { .. } => &self.pattern_pipeline,
                 BatchType::Shape => &self.shape_pipeline,
+                #[cfg(feature = "text")]
                 BatchType::Text { .. } => &self.text_pipeline,
             };
 
@@ -241,6 +248,7 @@ impl Draw {
         self.add_batch(info, check_type, create_type);
     }
 
+    #[cfg(feature = "text")]
     pub fn add_text<'a>(&mut self, info: &TextInfo<'a>) {
         let check_type = |b: &Batch, _: &TextInfo| !b.is_text();
         let create_type = |_: &TextInfo| BatchType::Text { texts: vec![] };
@@ -331,6 +339,7 @@ impl DrawInfo for ShapeInfo<'_> {
     }
 }
 
+#[cfg(feature = "text")]
 pub struct TextInfo<'a> {
     pub count: usize,
     pub transform: Option<&'a Mat3>,
@@ -339,6 +348,7 @@ pub struct TextInfo<'a> {
     pub blend_mode: Option<BlendMode>,
 }
 
+#[cfg(feature = "text")]
 impl DrawInfo for TextInfo<'_> {
     fn transform(&self) -> &Option<&Mat3> {
         &self.transform

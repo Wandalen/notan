@@ -1,5 +1,7 @@
 use crate::builder::DrawProcess;
-use crate::draw::{Draw, TextInfo};
+use crate::draw::Draw;
+#[cfg(feature = "text")]
+use crate::draw::TextInfo;
 use crate::transform::DrawTransform;
 use notan_glyph::{HorizontalAlign, Layout, Section, Text, VerticalAlign};
 use notan_graphics::color::Color;
@@ -7,6 +9,7 @@ use notan_graphics::pipeline::BlendMode;
 use notan_math::Mat3;
 use notan_text::Font;
 
+#[cfg(feature = "text")]
 pub struct TextSection<'a> {
     text: &'a str,
     matrix: Option<Mat3>,
@@ -140,6 +143,7 @@ impl DrawProcess for TextSection<'_> {
             section.bounds.0 = mw;
         }
 
+        #[cfg(feature = "text")]
         draw.add_text(&TextInfo {
             count,
             section: &section,

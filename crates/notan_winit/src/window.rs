@@ -27,6 +27,7 @@ impl WindowBackend for WinitWindowBackend {
         (logical.width as _, logical.height as _)
     }
 
+    #[cfg(feature = "fullscreen")]
     fn set_fullscreen(&mut self, enabled: bool) {
         if enabled {
             let monitor = self.window().current_monitor();

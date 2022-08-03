@@ -32,7 +32,7 @@ fn mouse_button_to_nae(btn: i16) -> MouseButton {
 
 pub fn enable_mouse(
     win: &mut WebWindowBackend,
-    fullscreen_dispatcher: Rc<RefCell<dyn Fn()>>,
+    #[cfg(feature = "fullscreen")] fullscreen_dispatcher: Rc<RefCell<dyn Fn()>>,
 ) -> Result<(), String> {
     // we need to clone here to avoid a borrow checker issue
     let add_evt_move = win.add_event_fn();
@@ -69,6 +69,7 @@ pub fn enable_mouse(
     )?);
 
     let canvas = win.canvas.clone();
+    #[cfg(feature = "fullscreen")]
     let fullscreen = fullscreen_dispatcher.clone();
     let captured = win.captured.clone();
     let last_x = last_x_ref.clone();
@@ -77,6 +78,7 @@ pub fn enable_mouse(
         &win.canvas,
         "mousedown",
         move |e: MouseEvent| {
+            #[cfg(feature = "fullscreen")]
             (*fullscreen.borrow())();
             e.stop_propagation();
             e.prevent_default();
@@ -93,6 +95,7 @@ pub fn enable_mouse(
     )?);
 
     let canvas = win.canvas.clone();
+    #[cfg(feature = "fullscreen")]
     let fullscreen = fullscreen_dispatcher.clone();
     let captured = win.captured.clone();
     let last_x = last_x_ref;
@@ -100,6 +103,7 @@ pub fn enable_mouse(
     callbacks.on_up = Some(window_add_event_listener(
         "mouseup",
         move |e: MouseEvent| {
+            #[cfg(feature = "fullscreen")]
             (*fullscreen.borrow())();
             e.stop_propagation();
             e.prevent_default();

@@ -5,7 +5,7 @@ use crate::app::empty::EmptyBackend as DefaultBackend;
 
 #[cfg(feature = "backend")]
 use notan_backend::DefaultBackend;
-#[cfg(feature = "log")
+#[cfg(feature = "log")]
 use notan_log::LogConfig;
 
 /// Initialize the app with the default backend and with an empty state

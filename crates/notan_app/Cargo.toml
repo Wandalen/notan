@@ -24,7 +24,8 @@ notan_audio = { path = "../notan_audio", version = "0.5.1", optional = true }
 downcast-rs = "1.2"
 indexmap = "1.9"
 futures = "0.3"
-platter = { version = "0.1.4", features = ["web-sys"] }
+# platter = { version = "0.1.4", features = ["web-sys"] }
+platter = { git = "https://github.com/Wandalen/platter.git", branch = "master", features = ["web-sys"] }
 parking_lot = "0.12"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]

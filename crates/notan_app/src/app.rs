@@ -4,6 +4,7 @@ use crate::{Backend, WindowBackend};
 #[cfg(feature = "audio")]
 use notan_audio::Audio;
 
+#[cfg(feature = "keyboard")]
 use notan_input::keyboard::Keyboard;
 use notan_input::mouse::Mouse;
 #[cfg(feature = "touch")]
@@ -22,6 +23,7 @@ pub struct App {
     pub mouse: Mouse,
 
     /// Keyboard data
+    #[cfg(feature = "keyboard")]
     pub keyboard: Keyboard,
 
     /// Touch data
@@ -44,6 +46,7 @@ pub struct App {
 impl App {
     pub(crate) fn new(backend: Box<dyn Backend>, #[cfg(feature = "audio")] audio: Audio) -> Self {
         let mouse = Default::default();
+        #[cfg(feature = "keyboard")]
         let keyboard = Default::default();
         #[cfg(feature = "touch")]
         let touch = Default::default();
@@ -52,6 +55,7 @@ impl App {
             #[cfg(feature = "audio")]
             audio,
             mouse,
+            #[cfg(feature = "keyboard")]
             keyboard,
             #[cfg(feature = "touch")]
             touch,

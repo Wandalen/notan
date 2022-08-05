@@ -19,7 +19,7 @@ notan_macro = { path = "../notan_macro", version = "0.5.1" }
 notan_math = { path = "../notan_math", version = "0.5.1" }
 notan_glyph = { path = "../notan_glyph", version = "0.5.1" }
 notan_text = { path = "../notan_text", version = "0.5.1", optional = true }
-lyon = "0.17"
+lyon = { version = "0.17", optional = true }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 

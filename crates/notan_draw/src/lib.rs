@@ -7,6 +7,7 @@ mod extension;
 mod images;
 mod manager;
 mod patterns;
+#[cfg(feature = "shape")]
 mod shapes;
 #[cfg(feature = "text")]
 mod texts;
@@ -22,6 +23,7 @@ pub use extension::*;
 pub use images::*;
 pub use manager::*;
 pub use patterns::*;
+#[cfg(feature = "shape")]
 pub use shapes::*;
 #[cfg(feature = "text")]
 pub use texts::*;

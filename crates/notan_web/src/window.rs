@@ -104,11 +104,11 @@ impl WebWindowBackend {
         let fullscreen_callback_ref = None;
         let capture_requested = Rc::new(RefCell::new(None));
 
-        #[cfg(feature = "text")]
+        #[cfg(feature = "fullscreen")]
         let min_size = config.min_size;
-        #[cfg(feature = "text")]
+        #[cfg(feature = "fullscreen")]
         let max_size = config.max_size;
-        #[cfg(feature = "text")]
+        #[cfg(feature = "fullscreen")]
         let resize_callback_ref = None;
 
         let mouse_callbacks = Default::default();
@@ -146,11 +146,11 @@ impl WebWindowBackend {
             #[cfg(feature = "fullscreen")]
             fullscreen_callback_ref,
             events,
-            #[cfg(feature = "text")]
+            #[cfg(feature = "fullscreen")]
             min_size,
-            #[cfg(feature = "text")]
+            #[cfg(feature = "fullscreen")]
             max_size,
-            #[cfg(feature = "text")]
+            #[cfg(feature = "fullscreen")]
             resize_callback_ref,
             _context_menu_callback_ref: context_menu_callback_ref,
             config,

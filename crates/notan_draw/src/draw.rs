@@ -175,6 +175,7 @@ impl Draw {
             let custom = match typ {
                 BatchType::Image { .. } => &self.image_pipeline,
                 BatchType::Pattern { .. } => &self.pattern_pipeline,
+                #[cfg(feature = "shape")]
                 BatchType::Shape => &self.shape_pipeline,
                 #[cfg(feature = "text")]
                 BatchType::Text { .. } => &self.text_pipeline,
@@ -223,6 +224,7 @@ impl Draw {
         self.add_batch(info, check_type, create_type);
     }
 
+    #[cfg(feature = "shape")]
     pub fn add_shape<'a>(&mut self, info: &ShapeInfo<'a>) {
         let check_type = |b: &Batch, _: &ShapeInfo| !b.is_shape();
         let create_type = |_: &ShapeInfo| BatchType::Shape;

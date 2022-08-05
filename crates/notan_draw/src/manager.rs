@@ -1,5 +1,6 @@
 use super::images::*;
 use super::patterns::*;
+#[cfg(feature = "shape")]
 use super::shapes::*;
 #[cfg(feature = "text")]
 use super::texts::*;
@@ -11,6 +12,7 @@ use notan_graphics::prelude::*;
 use notan_math::Mat4;
 
 pub struct DrawManager {
+    #[cfg(feature = "shape")]
     shape_painter: ShapePainter,
     image_painter: ImagePainter,
     pattern_painter: PatternPainter,
@@ -22,6 +24,7 @@ pub struct DrawManager {
 
 impl DrawManager {
     pub fn new(device: &mut Device) -> Result<Self, String> {
+        #[cfg(feature = "shape")]
         let shape_painter = ShapePainter::new(device)?;
         let image_painter = ImagePainter::new(device)?;
         let pattern_painter = PatternPainter::new(device)?;
@@ -29,6 +32,7 @@ impl DrawManager {
         let text_painter = TextPainter::new(device)?;
         let renderer = device.create_renderer();
         Ok(Self {
+            #[cfg(feature = "shape")]
             shape_painter,
             image_painter,
             pattern_painter,
@@ -76,6 +80,7 @@ impl DrawManager {
         create_pattern_pipeline(device, fragment)
     }
 
+    #[cfg(feature = "shape")]
     pub fn create_shape_pipeline(
         &self,
         device: &mut Device,
@@ -113,6 +118,7 @@ fn paint_batch(
         BatchType::Image { .. } => manager
             .image_painter
             .push(&mut manager.renderer, b, projection),
+        #[cfg(feature = "shape")]
         BatchType::Shape => manager
             .shape_painter
             .push(&mut manager.renderer, b, projection),
@@ -176,6 +182,7 @@ fn process_draw(
     process_glyphs(manager, draw, device, glyphs);
 
     manager.image_painter.clear();
+    #[cfg(feature = "shape")]
     manager.shape_painter.clear();
     manager.pattern_painter.clear();
     #[cfg(feature = "text")]
@@ -213,6 +220,7 @@ fn process_draw(
     manager.renderer.end();
 
     manager.image_painter.upload_buffers(device);
+    #[cfg(feature = "shape")]
     manager.shape_painter.upload_buffers(device);
     manager.pattern_painter.upload_buffers(device);
     #[cfg(feature = "text")]

@@ -13,11 +13,15 @@ use crate::{App, Backend, BackendSystem, FrameState, GfxExtension, GfxRenderer};
 use indexmap::IndexMap;
 #[cfg(feature = "audio")]
 use notan_audio::Audio;
+#[cfg(feature = "use_touch_as_mouse")]
 use notan_core::events::{Event, EventIterator};
+#[cfg(feature = "use_touch_as_mouse")]
 use notan_core::mouse::MouseButton;
 use notan_input::internals::{
-    clear_keyboard, clear_mouse, process_keyboard_events, process_mouse_events,
+    clear_mouse, process_mouse_events,
 };
+#[cfg(feature = "keyboard")]
+use notan_input::internals::{process_keyboard_events, clear_keyboard};
 
 #[cfg(feature = "touch")]
 use notan_input::internals::process_touch_events;
@@ -56,6 +60,7 @@ pub struct AppBuilder<S, B> {
 
     late_config: Option<IndexMap<std::any::TypeId, Box<dyn BuildConfig<S, B>>>>,
 
+    #[cfg(feature = "use_touch_as_mouse")]
     use_touch_as_mouse: bool,
 
     pub(crate) window: WindowConfig,
@@ -84,6 +89,7 @@ where
             extension_callbacks: vec![],
             window: Default::default(),
             late_config: Some(Default::default()),
+            #[cfg(feature = "use_touch_as_mouse")]
             use_touch_as_mouse: true,
         };
 
@@ -103,6 +109,7 @@ where
     }
 
     /// Converts touch events as mouse events
+    #[cfg(feature = "use_touch_as_mouse")]
     pub fn touch_as_mouse(mut self, enabled: bool) -> Self {
         self.use_touch_as_mouse = enabled;
         self
@@ -227,6 +234,7 @@ where
             mut plugin_callbacks,
             mut extension_callbacks,
             window,
+            #[cfg(feature = "use_touch_as_mouse")]
             use_touch_as_mouse,
             ..
         } = builder;
@@ -278,6 +286,7 @@ where
             cb.exec(&mut app, &mut assets, &mut plugins, &mut state);
         }
 
+        #[cfg(feature = "use_touch_as_mouse")]
         let mut current_touch_id: Option<u64> = None;
 
         if let Err(e) = initialize(app, state, move |app, mut state| {
@@ -310,10 +319,12 @@ where
             // Manage each event
             let mut events = app.backend.events_iter();
             while let Some(evt) = events.next() {
+                #[cfg(feature = "use_touch_as_mouse")]
                 if use_touch_as_mouse {
                     touch_as_mouse(&mut current_touch_id, &mut events, &evt);
                 }
 
+                #[cfg(feature = "keyboard")]
                 process_keyboard_events(&mut app.keyboard, &evt, delta);
                 process_mouse_events(&mut app.mouse, &evt, delta);
                 #[cfg(feature = "touch")]
@@ -355,13 +366,18 @@ where
             // call next frame in lazy mode if user is pressing mouse or keyboard
             if app.window().lazy_loop() {
                 let mouse_down = !app.mouse.down.is_empty();
+                #[cfg(feature = "keyboard")]
                 let key_down = !app.keyboard.down.is_empty();
+                #[cfg(not(feature = "keyboard"))]
+                let key_down = false;
+
                 if mouse_down || key_down {
                     app.window().request_frame();
                 }
             }
 
             clear_mouse(&mut app.mouse);
+            #[cfg(feature = "keyboard")]
             clear_keyboard(&mut app.keyboard);
 
             // Manage post frame event
@@ -385,6 +401,7 @@ where
     }
 }
 
+#[cfg(feature = "use_touch_as_mouse")]
 #[inline]
 fn touch_as_mouse(current_touch_id: &mut Option<u64>, events: &mut EventIterator, evt: &Event) {
     match evt {

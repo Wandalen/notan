@@ -20,6 +20,7 @@ pub(crate) enum BatchType {
     Pattern {
         texture: Texture,
     },
+    #[cfg(feature = "shape")]
     Shape,
     #[cfg(feature = "text")]
     Text {
@@ -40,6 +41,7 @@ pub(crate) struct Batch {
 }
 
 impl Batch {
+    #[cfg(feature = "shape")]
     pub fn is_shape(&self) -> bool {
         matches!(self.typ, BatchType::Shape)
     }
@@ -75,6 +77,7 @@ impl Batch {
         match &self.typ {
             BatchType::Image { .. } => 8,
             BatchType::Pattern { .. } => 12,
+            #[cfg(feature = "shape")]
             BatchType::Shape => 6,
             #[cfg(feature = "text")]
             BatchType::Text { .. } => 8, //TODO check offset

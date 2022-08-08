@@ -2052,8 +2052,7 @@ checksum = "1df8c4ec4b0627e53bdf214615ad287367e482558cf84b109250b37464dc03ae"
 [[package]]
 name = "platter"
 version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b3225653edff1ce73ee0ce933fb90dc589367f536b4e8a47fb27c1154f66a6d9"
+source = "git+https://github.com/Wandalen/platter.git?branch=master#d197073feb5b30a22958b103cd60a54ef09bf6fa"
 dependencies = [
  "futures-util",
  "js-sys",

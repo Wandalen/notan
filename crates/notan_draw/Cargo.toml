@@ -25,3 +25,4 @@ serde_json = "1.0"
 
 [features]
 text = ["notan_text"]
+shape = ["lyon"]

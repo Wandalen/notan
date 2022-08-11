@@ -282,6 +282,7 @@ impl WindowBackend for WebWindowBackend {
         *self.fullscreen_requested.borrow_mut() = Some(enabled);
     }
 
+    #[cfg(feature = "fullscreen")]
     fn is_fullscreen(&self) -> bool {
         self.document.fullscreen()
     }

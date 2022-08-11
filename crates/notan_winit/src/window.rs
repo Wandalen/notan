@@ -37,6 +37,7 @@ impl WindowBackend for WinitWindowBackend {
         }
     }
 
+    #[cfg(feature = "fullscreen")]
     fn is_fullscreen(&self) -> bool {
         self.window().fullscreen().is_some()
     }

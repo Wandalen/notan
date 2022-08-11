@@ -122,6 +122,7 @@ pub trait WindowBackend {
     fn set_fullscreen(&mut self, enabled: bool);
 
     /// Returns true if the window is in fullscreen mode
+    #[cfg(feature = "fullscreen")]
     fn is_fullscreen(&self) -> bool;
 
     /// Window's width

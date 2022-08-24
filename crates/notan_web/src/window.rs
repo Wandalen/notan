@@ -59,7 +59,7 @@ pub struct WebWindowBackend {
     #[cfg(feature = "drop_files")]
     pub(crate) file_callbacks: FileCallbacks,
 
-    config: WindowConfig,
+    pub(crate) config: WindowConfig,
 
     raf: RafType,
     pub(crate) frame_requested: Rc<RefCell<bool>>,

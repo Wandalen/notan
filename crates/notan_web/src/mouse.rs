@@ -143,15 +143,19 @@ pub fn enable_mouse(
         },
     )?);
 
+    let enable_web_page_scroll = win.config.enable_web_page_scroll;
+
     callbacks.on_wheel = Some(canvas_add_event_listener(
         &win.canvas,
         "wheel",
         move |e: WheelEvent| {
-            let delta_x = e.delta_x() as _;
-            let delta_y = e.delta_y() as _;
-            add_evt_wheel(Event::MouseWheel { delta_x, delta_y });
-            e.stop_propagation();
-            e.prevent_default();
+            if !enable_web_page_scroll {
+                let delta_x = e.delta_x() as _;
+                let delta_y = e.delta_y() as _;
+                add_evt_wheel(Event::MouseWheel { delta_x, delta_y });
+                    e.stop_propagation();
+                    e.prevent_default();
+                }
         },
     )?);
 

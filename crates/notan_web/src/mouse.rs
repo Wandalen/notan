@@ -143,13 +143,13 @@ pub fn enable_mouse(
         },
     )?);
 
-    let enable_web_page_scroll = win.config.enable_web_page_scroll;
+    let disable_canvas_scroll_propagation = win.config.disable_canvas_scroll_propagation;
 
     callbacks.on_wheel = Some(canvas_add_event_listener(
         &win.canvas,
         "wheel",
         move |e: WheelEvent| {
-            if !enable_web_page_scroll {
+            if !disable_canvas_scroll_propagation {
                 let delta_x = e.delta_x() as _;
                 let delta_y = e.delta_y() as _;
                 add_evt_wheel(Event::MouseWheel { delta_x, delta_y });

@@ -57,6 +57,9 @@ pub struct WindowConfig {
 
     /// Hide the windows
     pub visible: bool,
+
+    /// Enable scrolling of the web page the canvas is in when the canvas is focused.
+    pub disable_canvas_scroll_propagation: bool,
 }
 
 impl Default for WindowConfig {
@@ -78,6 +81,7 @@ impl Default for WindowConfig {
             transparent: false,
             decorations: true,
             visible: true,
+            disable_canvas_scroll_propagation: false,
         }
     }
 }
@@ -90,6 +94,12 @@ impl WindowConfig {
 
     pub fn canvas_id(mut self, canvas_id: String) -> Self {
         self.canvas_id = canvas_id;
+        self
+    }
+
+    /// Enable scrolling of the web page the canvas is in when the canvas is focused.
+    pub fn disable_canvas_scroll_propagation(mut self) -> Self {
+        self.disable_canvas_scroll_propagation = true;
         self
     }
 

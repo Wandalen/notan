@@ -14,18 +14,12 @@ pub(crate) struct TextData {
 
 #[derive(Clone, Debug)]
 pub(crate) enum BatchType {
-    Image {
-        texture: Texture,
-    },
-    Pattern {
-        texture: Texture,
-    },
+    Image { texture: Texture },
+    Pattern { texture: Texture },
     #[cfg(feature = "shape")]
     Shape,
     #[cfg(feature = "text")]
-    Text {
-        texts: Vec<TextData>,
-    },
+    Text { texts: Vec<TextData> },
 }
 
 #[derive(Clone, Debug)]

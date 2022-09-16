@@ -47,7 +47,8 @@ impl DrawManager {
         &mut self,
         draw: &Draw,
         device: &mut Device,
-        #[cfg(feature = "text")] glyphs: &mut GlyphBrush,
+        #[cfg(feature = "text")]
+        glyphs: &mut GlyphBrush,
     ) -> &[Commands] {
         self.renderer.clear();
         process_draw(
@@ -100,9 +101,11 @@ impl DrawManager {
 }
 
 fn paint_batch(
-    #[cfg(feature = "text")] device: &mut Device,
+    #[cfg(feature = "text")]
+    device: &mut Device,
     manager: &mut DrawManager,
-    #[cfg(feature = "text")] glyphs: &mut GlyphBrush,
+    #[cfg(feature = "text")]
+    glyphs: &mut GlyphBrush,
     b: &Batch,
     projection: &Mat4,
 ) {
@@ -176,7 +179,8 @@ fn process_draw(
     manager: &mut DrawManager,
     draw: &Draw,
     device: &mut Device,
-    #[cfg(feature = "text")] glyphs: &mut GlyphBrush,
+    #[cfg(feature = "text")]
+    glyphs: &mut GlyphBrush,
 ) {
     #[cfg(feature = "text")]
     process_glyphs(manager, draw, device, glyphs);

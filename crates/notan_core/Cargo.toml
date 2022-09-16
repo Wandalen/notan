@@ -1,6 +1,6 @@
 [package]
 name = "notan_core"
-version = "0.5.1"
+version = "0.6.0"
 authors = ["Nazarí González <nazari.nz@gmail.com>"]
 edition = "2021"
 readme = "README.md"

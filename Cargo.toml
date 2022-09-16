@@ -1,6 +1,6 @@
 [package]
 name = "notan"
-version = "0.5.1"
+version = "0.6.0"
 authors = ["Nazarí González <nazari.nz@gmail.com>"]
 edition = "2021"
 categories = ["graphics", "rendering", "wasm", "gui", "multimedia"]
@@ -19,20 +19,20 @@ all-features = true
 lto = true
 
 [dependencies]
-notan_core = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1" }
-notan_input = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1" }
-notan_app = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1" }
-notan_macro = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1" }
-notan_math = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1" }
-notan_graphics = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1" }
-notan_utils = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1" }
-notan_log = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1", optional = true }
-notan_glyph = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1", optional = true }
-notan_draw = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1", optional = true }
-notan_backend = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1", optional = true }
-notan_egui = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1", optional = true }
-notan_text = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1", optional = true }
-notan_audio = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.5.1", optional = true }
+notan_core = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0" }
+notan_input = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0" }
+notan_app = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0" }
+notan_macro = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0" }
+notan_math = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0" }
+notan_graphics = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0" }
+notan_utils = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0" }
+notan_log = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0", optional = true }
+notan_glyph = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0", optional = true }
+notan_draw = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0", optional = true }
+notan_backend = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0", optional = true }
+notan_egui = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0", optional = true }
+notan_text = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0", optional = true }
+notan_audio = { git = "https://github.com/Wandalen/notan.git", branch = "main", version = "0.6.0", optional = true }
 
 [workspace]
 members = ["crates/*"]
